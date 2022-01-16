@@ -4,8 +4,8 @@ import { Modal, Screen, Tabs } from '../../screens'
 
 type BaseScreenInfo = {
   name: string
-  component: React.FC
-  // component: React.FC<NativeStackScreenProps<ScreenProps, Screen>>; // idk why it doesn't work
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  component: React.FC<any>
 }
 
 type ScreenInfo = BaseScreenInfo & {
