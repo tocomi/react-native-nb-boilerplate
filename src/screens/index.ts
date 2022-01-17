@@ -90,7 +90,7 @@ const tabs: TabScreenLayouts = {
     }),
   },
 }
-const TabNavigator = () => genTabNavigator([tabs.Main, tabs.WIP, tabs.Settings])
+const TabNavigator = () => genTabNavigator([tabs.WIP, tabs.Main, tabs.Settings])
 
 // Modals
 const modals: ModalScreenLayouts = {
