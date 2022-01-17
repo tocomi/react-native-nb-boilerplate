@@ -3,6 +3,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import React, { useCallback, useState } from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
 import {
+  ActionSheet,
   Button,
   Card,
   Colors,
@@ -12,6 +13,7 @@ import {
   View,
 } from 'react-native-ui-lib'
 import { ScreenProps } from '.'
+import { useVisibility } from '../hooks'
 
 type Props = NativeStackScreenProps<ScreenProps, 'Example'>
 
@@ -20,16 +22,20 @@ const CardView: React.VFC = () => {
     <View padding-s4>
       <Card height={120}>
         <View padding-20 flex>
-          <Text text70 grey10>
+          <Text text60R grey10>
             You’re Invited!
           </Text>
-          <Text text80 grey10>
-            222 Join Old The Town Barbershop Official Store. Download the Wix
-            app to...
-          </Text>
-          <Text text90 grey50>
-            wix.to/A465c
-          </Text>
+          <View marginT-4>
+            <Text text80 grey10>
+              222 Join Old The Town Barbershop Official Store. Download the Wix
+              app to...
+            </Text>
+          </View>
+          <View marginT-4 right>
+            <Text text80BO grey50>
+              2022/01/12
+            </Text>
+          </View>
         </View>
       </Card>
     </View>
@@ -37,17 +43,11 @@ const CardView: React.VFC = () => {
 }
 
 const DialogView: React.VFC = () => {
-  const [opened, setOpened] = useState(false)
-  const open = useCallback(() => {
-    setOpened(true)
-  }, [])
-  const close = useCallback(() => {
-    setOpened(false)
-  }, [])
+  const [visible, open, close] = useVisibility(false)
   return (
     <View marginT-16>
       <Dialog
-        visible={opened}
+        visible={visible}
         onDismiss={close}
         containerStyle={dialogStyles.container}
         useSafeArea
@@ -77,7 +77,6 @@ const DialogView: React.VFC = () => {
           label="Open Dialog"
           backgroundColor={Colors.cyan10}
           onPress={open}
-          enableShadow
         />
       </View>
     </View>
@@ -92,12 +91,47 @@ const dialogStyles = StyleSheet.create({
   },
 })
 
+const ActionSheetView: React.VFC = () => {
+  const [visible, open, close] = useVisibility(false)
+  const [selected, setSelected] = useState('')
+  const select = useCallback((selected: string) => {
+    setSelected(selected)
+  }, [])
+  return (
+    <View marginT-16>
+      <ActionSheet
+        visible={visible}
+        onDismiss={close}
+        title="First Pokemon"
+        message="Choose your first partner."
+        cancelButtonIndex={3}
+        useNativeIOS
+        options={[
+          { label: 'ヒトカゲ', onPress: () => select('ヒトカゲ') },
+          { label: 'ゼニガメ', onPress: () => select('ゼニガメ') },
+          { label: 'フシギダネ', onPress: () => select('フシギダネ') },
+          { label: 'cancel', onPress: () => select('') },
+        ]}
+      />
+      <View centerH>
+        <Button
+          label="Open Action Sheet"
+          backgroundColor={Colors.blue10}
+          onPress={open}
+        />
+        <Text>{selected}</Text>
+      </View>
+    </View>
+  )
+}
+
 export const Example: React.FC<Props> = () => {
   return (
     <View flex bg-bgColor>
       <ScrollView contentInsetAdjustmentBehavior="automatic">
         <CardView />
         <DialogView />
+        <ActionSheetView />
       </ScrollView>
     </View>
   )
