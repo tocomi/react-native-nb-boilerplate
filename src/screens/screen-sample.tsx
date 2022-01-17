@@ -1,66 +1,99 @@
+/* eslint-disable react/no-unescaped-entities */
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { observer } from 'mobx-react'
-import React from 'react'
-import { Alert, ScrollView } from 'react-native'
-import { View, Text } from 'react-native-ui-lib'
+import React, { useCallback, useState } from 'react'
+import { ScrollView, StyleSheet } from 'react-native'
+import {
+  Button,
+  Card,
+  Colors,
+  Dialog,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native-ui-lib'
 import { ScreenProps } from '.'
-import { BButton } from '../components/button'
-import { Reanimated2 } from '../components/reanimated2'
-import { Section } from '../components/section'
-import { useServices } from '../services'
-// import { useStores } from '../stores';
-// import { useConstants } from '../utils/constants';
-import { randomNum } from '../utils/help'
 
 type Props = NativeStackScreenProps<ScreenProps, 'Example'>
 
-export const Example: React.FC<Props> = observer(({ route }) => {
-  const { value } = route.params ?? { value: randomNum() }
-  const { nav, t } = useServices()
-  // const {} = useStores();
-  // const {} = useConstants();
+const CardView: React.VFC = () => {
+  return (
+    <View padding-s4>
+      <Card height={120}>
+        <View padding-20 flex>
+          <Text text70 grey10>
+            You’re Invited!
+          </Text>
+          <Text text80 grey10>
+            222 Join Old The Town Barbershop Official Store. Download the Wix
+            app to...
+          </Text>
+          <Text text90 grey50>
+            wix.to/A465c
+          </Text>
+        </View>
+      </Card>
+    </View>
+  )
+}
 
+const DialogView: React.VFC = () => {
+  const [opened, setOpened] = useState(false)
+  const open = useCallback(() => {
+    setOpened(true)
+  }, [])
+  const close = useCallback(() => {
+    setOpened(false)
+  }, [])
+  return (
+    <View marginT-16>
+      <Dialog
+        visible={opened}
+        onDismiss={close}
+        containerStyle={dialogStyles.container}
+        useSafeArea
+      >
+        <ScrollView>
+          <View centerH>
+            <Text text40>Heaven</Text>
+          </View>
+          <View marginT-16>
+            <Text text70R grey20>
+              Can't get my mind out of those memories. Now time to tell them
+              "don't take my dream". Still music keeps on turning me from the
+              words that hurt my soul Removing doubts from my mind.
+            </Text>
+          </View>
+          <View marginT-24 right>
+            <TouchableOpacity onPress={close}>
+              <Text text70 red40>
+                close
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </Dialog>
+      <View centerH>
+        <Button enableShadow label="Open Dialog" onPress={open} />
+      </View>
+    </View>
+  )
+}
+const dialogStyles = StyleSheet.create({
+  container: {
+    backgroundColor: Colors.white,
+    borderRadius: 12,
+    paddingVertical: 32,
+    paddingHorizontal: 24,
+  },
+})
+
+export const Example: React.FC<Props> = () => {
   return (
     <View flex bg-bgColor>
       <ScrollView contentInsetAdjustmentBehavior="automatic">
-        <View padding-s4>
-          <Section title={t.do('section.navigation.title')}>
-            {!value ? null : (
-              <Text textColor text50R>
-                Pass prop: {value}
-              </Text>
-            )}
-
-            <View left>
-              <BButton
-                marginV-s1
-                label={t.do('section.navigation.button.push')}
-                onPress={() => nav.push('Example', { value: randomNum() })}
-              />
-              <BButton
-                marginV-s1
-                label={t.do('section.navigation.button.show')}
-                onPress={() => nav.show('ExampleModal')}
-              />
-              <BButton
-                marginV-s1
-                label={t.do('section.navigation.button.sharedTransition')}
-                onPress={() => Alert.alert('future feature: shared transition')}
-              />
-            </View>
-
-            <Reanimated2 />
-
-            <View left marginT-s4>
-              <BButton
-                marginV-s1
-                label={t.do('section.navigation.button.back')}
-                onPress={nav.pop}
-              />
-            </View>
-          </Section>
-        </View>
+        <CardView />
+        <DialogView />
       </ScrollView>
     </View>
   )
-})
+}
