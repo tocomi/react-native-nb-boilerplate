@@ -73,7 +73,12 @@ const DialogView: React.VFC = () => {
         </ScrollView>
       </Dialog>
       <View centerH>
-        <Button enableShadow label="Open Dialog" onPress={open} />
+        <Button
+          label="Open Dialog"
+          backgroundColor={Colors.cyan10}
+          onPress={open}
+          enableShadow
+        />
       </View>
     </View>
   )
