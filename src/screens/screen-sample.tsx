@@ -1,5 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import { format } from 'date-fns'
 import React, { useCallback, useState } from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
 import {
@@ -9,17 +10,82 @@ import {
   Colors,
   Dialog,
   Text,
+  TextField,
   TouchableOpacity,
   View,
 } from 'react-native-ui-lib'
 import { ScreenProps } from '.'
 import { useVisibility } from '../hooks'
 
-type Props = NativeStackScreenProps<ScreenProps, 'Example'>
+type Mode = 'INPUT' | 'DECIDED'
+const InputView: React.VFC = () => {
+  const [mode, setMode] = useState<Mode>('INPUT')
+  const [value, setValue] = useState('')
+  const onChangeText = useCallback((value: string) => {
+    setValue(value)
+  }, [])
+  const submit = useCallback(() => {
+    setMode('DECIDED')
+  }, [])
+  const cancel = useCallback(() => {
+    setMode('INPUT')
+  }, [])
+
+  return (
+    <View marginT-16 centerH>
+      <View>
+        <Text text40BO grey10>
+          {format(new Date(), 'yyyy/MM/dd (EEE)')}
+        </Text>
+      </View>
+      <View marginT-24>
+        {mode === 'INPUT' ? (
+          <TextField
+            value={value}
+            onChangeText={onChangeText}
+            validate="number"
+            style={inputStyles.textFieldContainer}
+          />
+        ) : (
+          <Text text20 grey20>
+            {value}
+          </Text>
+        )}
+      </View>
+      {mode === 'INPUT' ? (
+        <View>
+          <Button
+            label="決定"
+            backgroundColor={Colors.blue10}
+            onPress={submit}
+            text60BO
+          />
+        </View>
+      ) : (
+        <View marginT-37>
+          <Button
+            label="変更"
+            backgroundColor={Colors.red30}
+            onPress={cancel}
+            text60BO
+          />
+        </View>
+      )}
+    </View>
+  )
+}
+const inputStyles = StyleSheet.create({
+  textFieldContainer: {
+    color: Colors.grey20,
+    fontSize: 48,
+    textAlign: 'center',
+    width: 240,
+  },
+})
 
 const CardView: React.VFC = () => {
   return (
-    <View padding-s4>
+    <View marginT-32 padding-s4>
       <Card height={120}>
         <View padding-20 flex>
           <Text text60R grey10>
@@ -125,10 +191,12 @@ const ActionSheetView: React.VFC = () => {
   )
 }
 
+type Props = NativeStackScreenProps<ScreenProps, 'Example'>
 export const Example: React.FC<Props> = () => {
   return (
     <View flex bg-bgColor>
       <ScrollView contentInsetAdjustmentBehavior="automatic">
+        <InputView />
         <CardView />
         <DialogView />
         <ActionSheetView />
