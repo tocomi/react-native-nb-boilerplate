@@ -1,6 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { format } from 'date-fns'
 import React, { useCallback, useState } from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
 import {
@@ -14,19 +13,36 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native-ui-lib'
+import { useRecoilState } from 'recoil'
 import { ScreenProps } from '.'
 import { useVisibility } from '../hooks'
+import { formatYYYYMMDD, formatYYYYMMDDWithDayOfWeek } from '../lib/date'
+import { achievementState } from '../stores/achievement'
 
 type Mode = 'INPUT' | 'DECIDED'
 const InputView: React.VFC = () => {
+  const [, setAchievements] = useRecoilState(achievementState)
   const [mode, setMode] = useState<Mode>('INPUT')
   const [value, setValue] = useState('')
   const onChangeText = useCallback((value: string) => {
     setValue(value)
   }, [])
   const submit = useCallback(() => {
+    setAchievements(achievements => {
+      const filtered = achievements.filter(
+        achievement =>
+          formatYYYYMMDD(achievement.date) !== formatYYYYMMDD(new Date())
+      )
+      return [
+        ...filtered,
+        {
+          date: new Date(),
+          result: Number(value),
+        },
+      ]
+    })
     setMode('DECIDED')
-  }, [])
+  }, [setAchievements, value])
   const cancel = useCallback(() => {
     setMode('INPUT')
   }, [])
@@ -35,7 +51,7 @@ const InputView: React.VFC = () => {
     <View marginT-16 centerH>
       <View>
         <Text text40BO grey10>
-          {format(new Date(), 'yyyy/MM/dd (EEE)')}
+          {formatYYYYMMDDWithDayOfWeek(new Date())}
         </Text>
       </View>
       <View marginT-24>
@@ -84,26 +100,21 @@ const inputStyles = StyleSheet.create({
 })
 
 const CardView: React.VFC = () => {
+  const [achievements] = useRecoilState(achievementState)
   return (
     <View marginT-32 padding-s4>
-      <Card height={120}>
-        <View padding-20 flex>
-          <Text text60R grey10>
-            You’re Invited!
-          </Text>
-          <View marginT-4>
-            <Text text80 grey10>
-              222 Join Old The Town Barbershop Official Store. Download the Wix
-              app to...
+      {achievements.map(achievement => (
+        <Card key={achievement.date.getTime()} marginT-8>
+          <View paddingV-16 paddingH-24 flex row spread>
+            <Text text60 grey10>
+              {achievement.result}
+            </Text>
+            <Text text70R grey30>
+              {formatYYYYMMDD(achievement.date)}
             </Text>
           </View>
-          <View marginT-4 right>
-            <Text text80BO grey50>
-              2022/01/12
-            </Text>
-          </View>
-        </View>
-      </Card>
+        </Card>
+      ))}
     </View>
   )
 }

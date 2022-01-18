@@ -3,6 +3,7 @@ import * as SplashScreen from 'expo-splash-screen'
 import React, { useCallback, useEffect, useState } from 'react'
 import { LogBox } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import { RecoilRoot } from 'recoil'
 import { AppNavigator } from './src/app'
 import { initServices } from './src/services'
 import { hydrateStores, StoresProvider } from './src/stores'
@@ -30,9 +31,9 @@ export default (): JSX.Element => {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <StoresProvider>
+      <RecoilRoot>
         <StoresProvider>{ready ? <AppNavigator /> : null}</StoresProvider>
-      </StoresProvider>
+      </RecoilRoot>
     </GestureHandlerRootView>
   )
 }
