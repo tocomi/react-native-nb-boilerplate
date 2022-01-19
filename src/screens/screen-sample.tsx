@@ -4,10 +4,12 @@ import React, { useCallback, useState } from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
 import {
   ActionSheet,
+  Assets,
   Button,
   Card,
   Colors,
   Dialog,
+  Icon,
   Text,
   TextField,
   TouchableOpacity,
@@ -60,7 +62,9 @@ const InputView: React.VFC = () => {
             value={value}
             onChangeText={onChangeText}
             validate="number"
+            validateOnChange
             style={inputStyles.textFieldContainer}
+            enableErrors
           />
         ) : (
           <Text text20 grey20>
@@ -105,13 +109,21 @@ const CardView: React.VFC = () => {
     <View marginT-32 padding-s4>
       {achievements.map(achievement => (
         <Card key={achievement.date.getTime()} marginT-8>
-          <View paddingV-16 paddingH-24 flex row spread>
+          <View paddingV-16 paddingH-24 row spread>
             <Text text60 grey10>
               {achievement.result}
             </Text>
-            <Text text70R grey30>
-              {formatYYYYMMDD(achievement.date)}
-            </Text>
+            <View row>
+              <Text text70R grey30>
+                {formatYYYYMMDD(achievement.date)}
+              </Text>
+              <Icon
+                marginL-16
+                size={24}
+                tintColor={Colors.grey30}
+                source={Assets.icons.search}
+              />
+            </View>
           </View>
         </Card>
       ))}
@@ -122,7 +134,7 @@ const CardView: React.VFC = () => {
 const DialogView: React.VFC = () => {
   const [visible, open, close] = useVisibility(false)
   return (
-    <View marginT-16>
+    <View marginT-48>
       <Dialog
         visible={visible}
         onDismiss={close}
