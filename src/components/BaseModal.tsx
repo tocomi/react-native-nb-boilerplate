@@ -24,7 +24,7 @@ export const BaseModal: VFC<BaseModalProps> = ({
           <Text>Body</Text>
         </Modal.Body>
         <Modal.Footer>
-          <Button.Group flex={1} justifyContent="space-between">
+          <Button.Group flex={1} justifyContent="flex-end">
             <HStack>
               <Button
                 onPress={submit}
@@ -32,11 +32,7 @@ export const BaseModal: VFC<BaseModalProps> = ({
               >
                 submit
               </Button>
-              <Button
-                variant="ghost"
-                colorScheme="coolGray"
-                onPress={closeModal}
-              >
+              <Button variant="ghost" colorScheme="red" onPress={closeModal}>
                 cancel
               </Button>
             </HStack>
