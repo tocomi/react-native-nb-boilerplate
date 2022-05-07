@@ -1,39 +1,25 @@
-import 'expo-dev-client'
-import * as SplashScreen from 'expo-splash-screen'
-import React, { useCallback, useEffect, useState } from 'react'
-import { LogBox } from 'react-native'
-import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import { NavigationContainer } from '@react-navigation/native'
+import { NativeBaseProvider, extendTheme } from 'native-base'
+import React from 'react'
 import { RecoilRoot } from 'recoil'
-import { AppNavigator } from './src/app'
-import { initServices } from './src/services'
-import { hydrateStores, StoresProvider } from './src/stores'
-import { configureDesignSystem } from './src/utils/designSystem'
+import { Main } from './src/app'
 
-LogBox.ignoreLogs(['Require'])
+// Define the config
+const config = {
+  useSystemColorMode: false,
+}
 
-export default (): JSX.Element => {
-  const [ready, setReady] = useState(false)
+// extend the theme
+const theme = extendTheme({ config })
 
-  const startApp = useCallback(async () => {
-    await SplashScreen.preventAutoHideAsync()
-
-    await hydrateStores()
-    await initServices()
-    configureDesignSystem()
-
-    setReady(true)
-    await SplashScreen.hideAsync()
-  }, [])
-
-  useEffect(() => {
-    startApp()
-  }, [startApp])
-
+export default function App() {
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <NativeBaseProvider theme={theme}>
       <RecoilRoot>
-        <StoresProvider>{ready ? <AppNavigator /> : null}</StoresProvider>
+        <NavigationContainer>
+          <Main />
+        </NavigationContainer>
       </RecoilRoot>
-    </GestureHandlerRootView>
+    </NativeBaseProvider>
   )
 }

@@ -1,32 +1,37 @@
-import { NavigationContainer } from '@react-navigation/native'
+import { MaterialIcons } from '@expo/vector-icons'
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
+import { Icon, useTheme } from 'native-base'
 import React from 'react'
-import { StatusBar, useColorScheme } from 'react-native'
-import { RootNavigator } from './screens'
-import { useServices } from './services'
-import {
-  getNavigationTheme,
-  getThemeStatusBarBGColor,
-  getThemeStatusBarStyle,
-} from './utils/designSystem'
+import { HomeScreen, SettingScreen } from './screens'
 
-export const AppNavigator = (): JSX.Element => {
-  useColorScheme()
-  const { nav } = useServices()
+const Tab = createMaterialBottomTabNavigator()
 
+export const Main = () => {
+  const { colors } = useTheme()
   return (
-    <>
-      <StatusBar
-        barStyle={getThemeStatusBarStyle()}
-        backgroundColor={getThemeStatusBarBGColor()}
+    <Tab.Navigator initialRouteName="Home" shifting>
+      <Tab.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{
+          tabBarLabel: 'Home',
+          tabBarColor: colors.cyan[500],
+          tabBarIcon: () => (
+            <Icon as={MaterialIcons} name="home" size="md" color="white" />
+          ),
+        }}
       />
-      <NavigationContainer
-        ref={nav.n}
-        onReady={nav.onReady}
-        onStateChange={nav.onStateChange}
-        theme={getNavigationTheme()}
-      >
-        <RootNavigator />
-      </NavigationContainer>
-    </>
+      <Tab.Screen
+        name="Setting"
+        component={SettingScreen}
+        options={{
+          tabBarLabel: 'Setting',
+          tabBarColor: colors.lightBlue[600],
+          tabBarIcon: () => (
+            <Icon as={MaterialIcons} name="settings" size="md" color="white" />
+          ),
+        }}
+      />
+    </Tab.Navigator>
   )
 }
