@@ -9,6 +9,7 @@ import {
 } from 'native-base'
 import React from 'react'
 import { Platform } from 'react-native'
+import { Bounceable } from 'rn-bounceable'
 import { BaseModal } from '../components'
 import { useBaseModal } from '../hooks/useBaseModal'
 
@@ -30,14 +31,16 @@ export const HomeScreen = () => {
         <Text>Home Screen</Text>
       </Center>
       <BaseModal isOpen={isOpen} submit={onSubmit} closeModal={closeModal} />
-      <Fab
-        size="sm"
-        renderInPortal={false}
-        shadow={4}
-        bg={colors.lightBlue[600]}
-        icon={<Icon color="white" as={AntDesign} name="plus" size="sm" />}
-        onPress={openModal}
-      />
+      <Bounceable>
+        <Fab
+          size="sm"
+          renderInPortal={false}
+          shadow={4}
+          bg={colors.lightBlue[600]}
+          icon={<Icon color="white" as={AntDesign} name="plus" size="sm" />}
+          onPress={openModal}
+        />
+      </Bounceable>
     </KeyboardAvoidingView>
   )
 }
