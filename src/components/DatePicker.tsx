@@ -23,13 +23,13 @@ export const DatePicker: VFC<DatePickerProps> = ({
       Platform.OS === 'ios' || (Platform.OS === 'android' && isShowDatePicker)
     )
   }, [isShowDatePicker])
+
   return (
     <>
       {isShow && (
         <DateTimePicker
           value={date}
           onChange={handleChangeDate}
-          maximumDate={new Date()}
           locale="ja-jp"
         />
       )}
