@@ -1,6 +1,6 @@
 # Overview
 
-Expo template with NativeBase.
+ReactNative template with NativeBase.
 
 # Library
 

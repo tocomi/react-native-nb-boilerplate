@@ -1,7 +1,7 @@
 {
-  "name": "expo-starter-native-base",
+  "name": "react-native-nb-boilerplate",
   "version": "1.0.0",
-  "description": "Expo with NativeBase template",
+  "description": "ReactNative template with NativeBase",
   "license": "MIT",
   "author": "tocomi",
   "main": "node_modules/expo/AppEntry.js",
